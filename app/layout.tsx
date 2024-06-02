@@ -2,7 +2,8 @@ import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
-import { ReactElement } from "react";
+import GoogleOAuthProvider from "@/provider/google-oauth-provider";
+import Sidebar from "@/components/common/sidebar/sidebar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -10,7 +11,7 @@ const fontSans = FontSans({
 });
 
 interface RootLayoutProps {
-  children: ReactElement;
+  children: React.ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
@@ -22,8 +23,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
+        suppressHydrationWarning={true}
       >
-        {children}
+        <GoogleOAuthProvider>
+          <div className="overflow-hidden max-h-screen flex rounded-lg border bg-background shadow-lg">
+            <Sidebar />
+            {children}
+          </div>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
