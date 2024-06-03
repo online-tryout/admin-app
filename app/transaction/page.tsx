@@ -1,5 +1,8 @@
 import Transaction from "@/components/transaction/transaction";
+import { getTransactions } from "./action";
 
 export default async function TransactionPage() {
-  return <Transaction />;
+  const transactions = await getTransactions();
+
+  return <Transaction transactions={transactions} />;
 }

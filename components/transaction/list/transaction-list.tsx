@@ -1,32 +1,40 @@
+import { Transaction } from "@/models/model";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import React from "react";
+import TransactionRow from "./transaction-row";
 import { FC, useEffect, useState } from "react";
 
 interface TransactionListProps {
-
+  transactions: Transaction[] | null;
+  onRowClicked: (id: string) => void;
 }
 
-const TransactionList: FC<TransactionListProps> = () => {
-  // const [currentUsers, setCurUsers] = useState(users);
+const TransactionList: FC<TransactionListProps> = ({
+  transactions,
+  onRowClicked,
+}) => {
   const [searchValue, setSearchValue] = useState("");
+  const [curTransactions, setCurTransactions] = useState<Transaction[] | null>(transactions);
 
   useEffect(() => {
-    // if (searchValue.trim().length) {
-    //   let newUsers = users?.filter((user) => {
-    //     const sv = searchValue.toLowerCase();
-    //     return (
-    //       user.email.toLowerCase().includes(sv) ||
-    //       user.name.toLowerCase().includes(sv)
-    //     );
-    //   });
+    if (searchValue.trim().length) {
+      let newTransaction = transactions?.filter((transaction) => {
+        const sv = searchValue.toLowerCase();
+        return transaction.tryout_name?.toLowerCase().includes(sv);
+      });
 
-    //   if (newUsers) {
-    //     setCurUsers(newUsers);
-    //   }
-    // } else {
-    //   setCurUsers(users);
-    // }
-  }, []);
+      if (newTransaction) {
+        setCurTransactions(newTransaction);
+      }
+    } else {
+      setCurTransactions(transactions);
+    }
+  }, [searchValue, transactions]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
 
   return (
     <div className="relative shrink basis-0 grow-[40] border-x">
@@ -44,8 +52,9 @@ const TransactionList: FC<TransactionListProps> = () => {
             </div>
             <input
               className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-8"
-              placeholder="Search"
+              placeholder="Search by Tryout Name"
               onChange={(e) => setSearchValue(e.currentTarget.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </form>
@@ -61,11 +70,14 @@ const TransactionList: FC<TransactionListProps> = () => {
           <div className="w-full rounded-lg">
             <div className="min-w-full table">
               <div className="flex flex-col gap-2 p-4 pt-4">
-                {/* {currentUsers?.map((user) => (
-                  <div key={user.uid} onClick={() => onUserClicked(user)}>
-                    <TransactionListRow user={user} />
+                {curTransactions?.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    onClick={() => onRowClicked(transaction.id)}
+                  >
+                    <TransactionRow transaction={transaction} />
                   </div>
-                ))} */}
+                ))}
               </div>
             </div>
           </div>
