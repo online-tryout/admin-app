@@ -17,6 +17,7 @@ import { google, signin } from "@/app/auth/action";
 import { useGoogleLogin } from "@react-oauth/google";
 import { User } from "@/models/model";
 import { useRouter } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 interface LoginForm {
   email: string;
@@ -47,7 +48,9 @@ const SignIn: FC = () => {
         values.password
       );
       successfullyLoginHandler(user, accessToken);
-    } catch (err: any) {}
+    } catch (err: any) {
+      errorLoginHandler();
+    }
     setSubmitting(false);
   };
 
@@ -62,6 +65,14 @@ const SignIn: FC = () => {
     flow: "implicit",
   });
 
+  const errorLoginHandler = () => {
+    toast({
+      title: "Error",
+      description: "failed to sign in",
+      variant: "destructive",
+    });
+  };
+
   const successfullyLoginHandler = (user: User, accessToken: string) => {
     setUser({
       name: user.name,
@@ -70,6 +81,11 @@ const SignIn: FC = () => {
       image: user.avatar,
     });
     setAccessToken(accessToken);
+    toast({
+      title: "Success",
+      description: "success to sign in",
+      variant: "default",
+    });
     router.push("/");
   };
 
@@ -158,7 +174,7 @@ const SignIn: FC = () => {
               </Form>
             )}
           </Formik>
-          <div className="relative">
+          {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t"></span>
             </div>
@@ -175,12 +191,12 @@ const SignIn: FC = () => {
           >
             <GoogleLogo className="mr-2 h-4 w-4" />
             Google
-          </Button>
+          </Button> */}
         </div>
       </div>
 
       {/* Footer */}
-      <CardFooter>
+      {/* <CardFooter>
         <div className="w-full px-8 mt-2 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <span
@@ -192,7 +208,7 @@ const SignIn: FC = () => {
             Signup
           </span>
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };

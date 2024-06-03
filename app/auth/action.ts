@@ -11,10 +11,11 @@ export async function signin(
 ): Promise<{ accessToken: string; user: User }> {
   "use server";
   try {
+    password = btoa(password)
     const { data } = await serverAxios.post<{
       user: User;
       accessToken: string;
-    }>("/api/auth/login", { email, password });
+    }>("/api/db/auth/login_admin", { email, password });
     cookies().set("accessToken", data.accessToken);
     return data;
   } catch (error) {
@@ -46,10 +47,13 @@ export async function signup(
 ): Promise<{ accessToken: string; user: User }> {
   "use server";
   try {
+    password = btoa(password)
+    const role_id = 1 
+    const token = cookies().get("accessToken")?.value ?? "";
     const { data } = await serverAxios.post<{
       user: User;
       accessToken: string;
-    }>("/api/auth/signup", { email, password, name });
+    }>("/api/db/auth/register", { email, password, name, role_id, token });
 
     cookies().set("accessToken", data.accessToken);
     return data;

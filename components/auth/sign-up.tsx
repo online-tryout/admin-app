@@ -17,6 +17,7 @@ import { google, signin, signup } from "@/app/auth/action";
 import { useGoogleLogin } from "@react-oauth/google";
 import { User } from "@/models/model";
 import { useRouter } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 interface SignupForm {
   email: string;
@@ -50,9 +51,23 @@ const SignUp: FC = () => {
         values.name,
         values.password
       );
-      successfullyLoginHandler(user, accessToken);
-    } catch (err: any) {}
+      toast({
+        title: "Success",
+        description: "Admin " + values.email + " successfully registered.",
+        variant: "default",
+      });
+    } catch (err: any) {
+      errorLoginHandler()
+    }
     setSubmitting(false);
+  };
+
+  const errorLoginHandler = () => {
+    toast({
+      title: "Error",
+      description: "failed to sign in",
+      variant: "destructive",
+    });
   };
 
   const signupWithGoogleHandler = useGoogleLogin({
@@ -73,20 +88,25 @@ const SignUp: FC = () => {
       email: user.email,
       image: user.avatar,
     });
-    setAccessToken(accessToken);
+    // setAccessToken(accessToken);
+    toast({
+      title: "Success",
+      description: "success to sign in",
+      variant: "default",
+    });
     router.push("/");
   };
 
   return (
-    <Card>
+    <Card className="flex flex-col grow h-full">
       {/* Header */}
       <CardHeader>
         <div className="mt-5 flex flex-col space-y-2 text-center">
           <CardTitle className="text-2xl font-semibold tracking-tight">
-            Register your account
+            Register new admin account
           </CardTitle>
           <CardDescription className="text-sm text-muted-foreground">
-            Fill the form bellow to regiter your account
+            Fill the form bellow to regiter a new admin account
           </CardDescription>
         </div>
       </CardHeader>
@@ -174,48 +194,18 @@ const SignUp: FC = () => {
                         <span>Loading...</span>
                       </>
                     ) : (
-                      "Sign In with Email"
+                      "Register"
                     )}
                   </Button>
                 </div>
               </Form>
             )}
           </Formik>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t"></span>
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <Button
-            className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-            variant="outline"
-            onClick={() => signupWithGoogleHandler()}
-          >
-            <GoogleLogo className="mr-2 h-4 w-4" />
-            Google
-          </Button>
+          
         </div>
       </div>
 
-      {/* Footer */}
-      <CardFooter>
-        <div className="w-full px-8 mt-2 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <span
-            className="cursor-pointer underline underline-offset-4 hover:text-primary"
-            onClick={() => {
-              document.getElementById("sign-in-trigger")?.click();
-            }}
-          >
-            Sign In
-          </span>
-        </div>
-      </CardFooter>
+      
     </Card>
   );
 };
