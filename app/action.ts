@@ -5,17 +5,11 @@ import { Chat, History, Tryout, User } from "@/models/model";
 import { serverAxios } from "@/utils/axios";
 import { cookies } from "next/headers";
 
-export async function getTryOut(): Promise<{
-  tryouts: Tryout[];
-  message: string;
-}> {
+export async function getTryOut(): Promise<Tryout[]> {
   "use server";
   try {
     const accessToken = cookies().get("accessToken")?.value;
-    const { data } = await serverAxios.get<{
-      tryouts: Tryout[];
-      message: string;
-    }>("/api/db/tryout", {
+    const { data } = await serverAxios.get("/api/db/tryout", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     return data;
@@ -35,10 +29,8 @@ export async function createTryout(tryout: CreateTryoutForm): Promise<{
     }>("/api/tryout/new", tryout, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    console.log(data);
     return data;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }

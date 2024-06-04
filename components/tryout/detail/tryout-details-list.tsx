@@ -15,10 +15,10 @@ const TryoutDetail: FC<TryoutDetailProps> = ({ tryout }) => {
     >
       <div className="text-5xl font-bold pb-4">{tryout?.title}</div>
       <div className="text-sm">
-        Started at {formatIsoDate(tryout?.startedAt ?? "")}
+        Started at {formatIsoDate(tryout?.started_at ?? "")}
       </div>
       <div className="text-sm">
-        Ended at {formatIsoDate(tryout?.endedAt ?? "")}
+        Ended at {formatIsoDate(tryout?.ended_at ?? "")}
       </div>
     </div>
   );

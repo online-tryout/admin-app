@@ -12,12 +12,10 @@ const TryoutRow: FC<TryoutRowProps> = ({ tryout }) => {
       <div className="flex w-full flex-col gap-1">
         <div className="flex items-center">
           <div className="flex items-center gap-2">
-            <div className="font-semibold">
-              {tryout.title}
-            </div>
+            <div className="font-semibold">{tryout.title}</div>
           </div>
           <div className="ml-auto text-xs text-foreground">
-            {formatIsoDate(tryout.startedAt)}
+            {formatIsoDate(tryout.started_at)}
           </div>
         </div>
       </div>

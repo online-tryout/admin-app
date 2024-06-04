@@ -30,21 +30,21 @@ export interface Chat {
 export interface Option {
   id: string;
   content: string;
-  isTrue: boolean;
-  optionOrder: number;
+  is_true: boolean;
+  option_order: number;
 }
 
 export interface Question {
   id: string;
   content: string;
-  questionOrder: number;
+  question_order: number;
   options: Option[];
 }
 
 export interface Module {
   id: string;
   title: string;
-  moduleOrder: number;
+  module_order: number;
   questions: Question[];
 }
 
@@ -53,8 +53,8 @@ export interface Tryout {
   title: string;
   price: number;
   status: string;
-  startedAt: string;
-  endedAt: string;
+  started_at: string;
+  ended_at: string;
   modules: Module[];
 }
 
